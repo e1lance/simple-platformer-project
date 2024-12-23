@@ -2,6 +2,7 @@
 #define GRAPHICS_H
 
 #include "globals.h"
+#include "player.h"
 
 void draw_text(Text &text) {
     Vector2 dimensions = MeasureTextEx(*text.font, text.str.c_str(), text.size * screen_scale, text.spacing);
@@ -52,7 +53,9 @@ void draw_game_overlay() {
     draw_text(score_shadow);
     draw_text(score);
 }
-
+void reset_player_score() {
+    player_score = 0;
+}
 void draw_level() {
     for (size_t row = 0; row < current_level.rows; ++row) {
         for (size_t column = 0; column < current_level.columns; ++column) {
@@ -68,11 +71,21 @@ void draw_level() {
                 case AIR:
                 case PLAYER:
                 case COIN:
+                case KEY:
                 case EXIT:
                     draw_image(air_image, pos, cell_size);
                     break;
                 case WALL:
                     draw_image(wall_image, pos, cell_size);
+                    break;
+                case FAKE:
+                    draw_image(break_image, pos, cell_size);
+                    break;
+                case LOCK:
+                    draw_image(lock_image, pos, cell_size);
+                    break;
+                case SPIKE:
+                    draw_image(spike_image, pos, cell_size);
                     break;
             }
             // The second image layer
@@ -81,8 +94,10 @@ void draw_level() {
                     draw_sprite(coin_sprite, pos, cell_size);
                     break;
                 case EXIT:
-                    draw_image(exit_image, pos, cell_size);
+                    draw_sprite(exit_sprite, pos, cell_size);
                     break;
+                case KEY:
+                    draw_sprite(key_sprite, pos, cell_size);
                 default:
                     break;
             }
@@ -100,11 +115,22 @@ void draw_player() {
 
     draw_sprite(player_sprite, pos, cell_size);
 }
+void draw_player_lives() {
+    for (int i = 0; i < player_lives; i++) {
+        DrawCircle(100 + i * 50, 100, 20, RED);
+    }
+}
 
 void draw_pause_menu() {
     draw_text(game_paused);
 }
-
+void draw_again_menu() {
+    draw_text(game_again);
+}
+void draw_over_menu() {
+    draw_text(over_title);
+    draw_text(over_subtitle);
+}
 void create_victory_menu_background() {
     for (auto &ball : victory_balls) {
         ball.x  = rand_up_to(screen_size.x);

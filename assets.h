@@ -17,18 +17,26 @@ void unload_fonts() {
 
 void load_images() {
     wall_image    = LoadTexture("data/images/wall.png");
+    lock_image    = LoadTexture("data/images/lock.png");
+    break_image   = LoadTexture("data/images/break.png");
     air_image     = LoadTexture("data/images/air.png");
-    exit_image    = LoadTexture("data/images/exit.png");
-    coin_sprite   = load_sprite("data/images/coin/coin",     ".png", 3, true, 18);
-    player_sprite = load_sprite("data/images/player/player", ".png", 3, true, 10);
+    spike_image   = LoadTexture("data/images/spike.png");
+    key_sprite    = load_sprite("data/images/key/key",".png", 18, true, 7);
+    exit_sprite   = load_sprite("data/images/exit/exit",".png", 4, true, 10);
+    coin_sprite   = load_sprite("data/images/coin/coin",     ".png", 6, true, 10);
+    player_sprite = load_sprite("data/images/player/player", ".png", 10, true, 5);
 }
 
 void unload_images() {
     UnloadTexture(wall_image);
     UnloadTexture(air_image);
-    UnloadTexture(exit_image);
+    UnloadTexture(spike_image);
+    UnloadTexture(lock_image);
+    UnloadTexture(break_image);
+    unload_sprite(exit_sprite);
     unload_sprite(player_sprite);
     unload_sprite(coin_sprite);
+    unload_sprite(key_sprite);
 }
 
 void draw_image(Texture2D image, Vector2 pos, float size) {
@@ -107,13 +115,31 @@ void draw_sprite(sprite &sprite, Vector2 pos, float width, float height) {
 void load_sounds() {
     InitAudioDevice();
 
+    death_sound = LoadSound("data/sounds/death.wav");
     coin_sound = LoadSound("data/sounds/coin.wav");
     exit_sound = LoadSound("data/sounds/exit.wav");
+    key_sound  = LoadSound("data/sounds/key.wav");
+    break_sound  = LoadSound("data/sounds/break.wav");
 }
 
 void unload_sounds() {
     UnloadSound(coin_sound);
     UnloadSound(exit_sound);
+    UnloadSound(death_sound);
+    UnloadSound(key_sound);
+    UnloadSound(break_sound);
+}
+
+Music main_menu_music;
+
+void load_music() {
+    main_menu_music = LoadMusicStream("data/music/theme.wav");
+    PlayMusicStream(main_menu_music);
+    SetMusicVolume(main_menu_music, 0.1f);
+}
+
+void unload_music() {
+    UnloadMusicStream(main_menu_music);
 }
 
 #endif // IMAGES_H
